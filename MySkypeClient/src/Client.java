@@ -33,8 +33,8 @@ public class Client extends Thread {
             }
         } catch (Exception exception) {
             JOptionPane.showMessageDialog(
-                    null,
-                    "Client error: " + exception.getMessage());
+                null,
+                "Client error: " + exception.getMessage());
         }
     }
 
@@ -79,8 +79,8 @@ public class Client extends Thread {
             microphoneThread.start();
         } catch (Exception exception) {
             JOptionPane.showMessageDialog(
-                    null,
-                    "Microphone error: " + exception.getMessage());
+                null,
+                "Microphone error: " + exception.getMessage());
         }
     }
 }
