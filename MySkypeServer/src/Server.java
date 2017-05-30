@@ -143,7 +143,7 @@ public class Server {
                     } else { //we got something to broadcast
                         Message m = broadCastQueue.get(0);
                         for (ClientConnection cc : clients) { //broadcast the message
-                            if (cc.getChId() != m.getChId()) {
+                            if (cc.getChId() != m.getID()) {
                                 cc.addToQueue(m);
                             }
                         }
