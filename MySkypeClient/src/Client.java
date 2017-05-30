@@ -1,4 +1,4 @@
-import javax.swing.*;
+import javax.swing.JOptionPane;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -6,7 +6,6 @@ import java.net.Socket;
 import java.util.HashMap;
 
 public class Client extends Thread {
-
     private Socket socket;
     private HashMap<Integer, AudioChannel> audioChannels = new HashMap<>();
 
@@ -17,24 +16,26 @@ public class Client extends Thread {
     @Override
     public void run() {
         try {
-            ObjectInputStream from = new ObjectInputStream(this.socket
-                    .getInputStream());
-            ObjectOutputStream to = new ObjectOutputStream(this.socket
-                    .getOutputStream());
+            ObjectInputStream from
+                    = new ObjectInputStream(this.socket.getInputStream());
+            ObjectOutputStream to
+                    = new ObjectOutputStream(this.socket.getOutputStream());
 
             this.getMicrophoneThread(to);
-
-            for (;;) {
-                if (this.socket.getInputStream().available() > 0) {
-                    this.receiveFrom(from);
-                } else {
-                    this.cleanChannels();
-                }
-            }
+            this.runClient(from);
         } catch (Exception exception) {
-            JOptionPane.showMessageDialog(
-                null,
-                "Client error: " + exception.getMessage());
+            this.displayError("Client error: " + exception.getMessage());
+        }
+    }
+
+    private void runClient(ObjectInputStream from)
+            throws IOException, ClassNotFoundException {
+        for (;;) {
+            if (this.socket.getInputStream().available() > 0) {
+                this.receiveFrom(from);
+            } else {
+                this.killAudioChannels();
+            }
         }
     }
 
@@ -58,7 +59,11 @@ public class Client extends Thread {
         }
     }
 
-    private void cleanChannels() {
+    private void displayError(String message) {
+        JOptionPane.showMessageDialog(null, message);
+    }
+
+    private void killAudioChannels() {
         for (AudioChannel audioChannel : this.audioChannels.values()) {
             if (audioChannel.canKill()) this.killChannel(audioChannel);
         }
@@ -78,9 +83,7 @@ public class Client extends Thread {
             MicThread microphoneThread = new MicThread(to);
             microphoneThread.start();
         } catch (Exception exception) {
-            JOptionPane.showMessageDialog(
-                null,
-                "Microphone error: " + exception.getMessage());
+            this.displayError("Microphone error: " + exception.getMessage());
         }
     }
 }
