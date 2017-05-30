@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/MySkype.iml" filepath="$PROJECT_DIR$/.idea/MySkype.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MySkypeClient/MySkypeClient.iml" filepath="$PROJECT_DIR$/MySkypeClient/MySkypeClient.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MySkypeServer/MySkypeServer.iml" filepath="$PROJECT_DIR$/MySkypeServer/MySkypeServer.iml" />
+    </modules>
+  </component>
+</project>
