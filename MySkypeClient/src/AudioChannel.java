@@ -8,7 +8,7 @@ import java.util.zip.GZIPInputStream;
 public class AudioChannel extends Thread {
     private Integer ID;
     private ArrayList<Message> messagesToPlay = new ArrayList<>();
-    private int lastSoundPacketLen = SoundPacket.defaultDataLenght;
+    private int lastSoundPacketLen = SoundPacket.defaultDataLength;
     private long lastPacketTime = System.nanoTime();
     private SourceDataLine speaker = null;
 

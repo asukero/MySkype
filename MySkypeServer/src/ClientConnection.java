@@ -95,7 +95,7 @@ public class ClientConnection extends Thread {
 
     private boolean isMessageValid(Message message) {
         if ((message.getData() instanceof SoundPacket)
-            && message.getTimestamp() + message.getTtl()
+            && message.getTimestamp() + message.getTTL()
             >= System.nanoTime() / 1000000L) {
             return true;
         }

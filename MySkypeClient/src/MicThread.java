@@ -37,9 +37,9 @@ public class MicThread extends Thread {
     @Override
     public void run() {
         for (;;) {
-            if (mic.available() >= SoundPacket.defaultDataLenght) { //we got enough data to send
-                byte[] buff = new byte[SoundPacket.defaultDataLenght];
-                while (mic.available() >= SoundPacket.defaultDataLenght) { //flush old data from mic to reduce lag, and read most recent data
+            if (mic.available() >= SoundPacket.defaultDataLength) { //we got enough data to send
+                byte[] buff = new byte[SoundPacket.defaultDataLength];
+                while (mic.available() >= SoundPacket.defaultDataLength) { //flush old data from mic to reduce lag, and read most recent data
                     mic.read(buff, 0, buff.length); //read from microphone
                 }
                 try {
