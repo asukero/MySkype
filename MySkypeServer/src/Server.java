@@ -56,7 +56,7 @@ public class Server {
     private void listen() throws IOException {
         try {
             this.serverSocket = new ServerSocket(this.port);
-            Log.add("Port " + port + ": server started");
+            Log.add("Port " + this.port + ": server started");
         } catch (IOException IOException) {
             Log.add("Server error: " + IOException.getMessage());
 
@@ -83,7 +83,7 @@ public class Server {
             Log.add("Dead connection closed: "
                     + clientConnection.getInetAddress()
                     + ":" + clientConnection.getPort()
-                    + " on port " + port);
+                    + " on port " + this.port);
 
             this.clientConnections.remove(clientConnection);
         }
