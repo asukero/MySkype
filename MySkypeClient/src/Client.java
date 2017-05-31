@@ -1,4 +1,3 @@
-import javax.swing.JOptionPane;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -24,7 +23,7 @@ public class Client extends Thread {
             this.getMicrophoneThread(to);
             this.runClient(from);
         } catch (Exception exception) {
-            this.displayError("Client error: " + exception.getMessage());
+            Utils.displayError("Client error: " + exception.getMessage());
         }
     }
 
@@ -59,10 +58,6 @@ public class Client extends Thread {
         }
     }
 
-    private void displayError(String message) {
-        JOptionPane.showMessageDialog(null, message);
-    }
-
     private void killAudioChannels() {
         for (AudioChannel audioChannel : this.audioChannels.values()) {
             if (audioChannel.canKill()) this.killChannel(audioChannel);
@@ -83,7 +78,7 @@ public class Client extends Thread {
             MicThread microphoneThread = new MicThread(to);
             microphoneThread.start();
         } catch (Exception exception) {
-            this.displayError("Microphone error: " + exception.getMessage());
+            Utils.displayError("Microphone error: " + exception.getMessage());
         }
     }
 }

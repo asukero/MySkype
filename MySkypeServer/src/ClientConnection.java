@@ -37,7 +37,7 @@ public class ClientConnection extends Thread {
         return s.getPort();
     }
 
-    public long getChId() { //return this client's unique id
+    public long getID() { //return this client's unique id
         return chId;
     }
 
