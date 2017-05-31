@@ -121,7 +121,7 @@ public class AudioChannel extends Thread {
             this.startSoundChannel();
 
             // check for new messages to be played
-            for (;;) {
+            while(true) {
                 if (this.messagesToPlay.isEmpty()) {
                     Utils.sleep(10);
 
