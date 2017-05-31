@@ -39,7 +39,7 @@ public class Client extends Thread {
 
     private void addAudioChannel(Message message) {
         AudioChannel newChannel = new AudioChannel(message.getID());
-        newChannel.addToQueue(message);
+        newChannel.addMessageToPlay(message);
         newChannel.start();
         this.audioChannels.put(newChannel.getID(), newChannel);
     }
@@ -50,7 +50,7 @@ public class Client extends Thread {
         AudioChannel sendTo = this.audioChannels.get(message.getID());
 
         if (sendTo != null) {
-            sendTo.addToQueue(message);
+            sendTo.addMessageToPlay(message);
         } else {
             this.addAudioChannel(message);
         }
