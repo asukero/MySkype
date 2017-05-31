@@ -27,7 +27,8 @@ public class Client extends Thread {
         }
     }
 
-    private void runClient(ObjectInputStream from) throws IOException, ClassNotFoundException {
+    private void runClient(ObjectInputStream from)
+        throws IOException, ClassNotFoundException {
         while(true) {
             if (this.socket.getInputStream().available() > 0) {
                 this.receiveFrom(from);
@@ -44,7 +45,8 @@ public class Client extends Thread {
         this.audioChannels.put(newChannel.getID(), newChannel);
     }
 
-    private void receiveFrom(ObjectInputStream from) throws IOException, ClassNotFoundException {
+    private void receiveFrom(ObjectInputStream from)
+        throws IOException, ClassNotFoundException {
         Message message = (Message) from.readObject();
 
         AudioChannel sendTo = this.audioChannels.get(message.getID());
@@ -57,7 +59,8 @@ public class Client extends Thread {
     }
 
     private void killAudioChannels() {
-        this.audioChannels.values().stream().filter(audioChannel -> audioChannel.canKill()).forEach(this::killChannel);
+        this.audioChannels.values().stream().filter(audioChannel
+            -> audioChannel.canKill()).forEach(this::killChannel);
 
         Utils.sleep(1);
     }
@@ -71,7 +74,7 @@ public class Client extends Thread {
         try {
             Utils.sleep(100);
 
-            MicThread microphoneThread = new MicThread(to);
+            MicrophoneThread microphoneThread = new MicrophoneThread(to);
             microphoneThread.start();
         } catch (Exception exception) {
             Utils.displayError("Microphone error: " + exception.getMessage());

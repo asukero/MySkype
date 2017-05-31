@@ -14,33 +14,14 @@ public class Utils {
         }
     }
 
-    public static String getExternalIP() {
-        try {
-            URL myIp = new URL("http://checkip.dyndns.org/");
-
-            BufferedReader in =
-                new BufferedReader(
-                new InputStreamReader(myIp.openStream()));
-
-            String s = in.readLine();
-
-            return s.substring(s.lastIndexOf(":") + 2, s.lastIndexOf
-                    ("</body>"));
-        } catch (Exception exception) {
-            return "error " + exception;
-        }
-    }
-
-    public static String getInternalIP() {
-        try {
-            return InetAddress.getLocalHost().getHostAddress();
-        } catch (UnknownHostException ex) {
-            return "error";
-        }
-    }
-
-
     public static void displayError(String message) {
-        JOptionPane.showMessageDialog(null, message);
+        Utils.displayError(message, null);
+    }
+
+    public static void displayError(String message, JRootPane JRootPane) {
+        JOptionPane.showMessageDialog(JRootPane,
+            message,
+            "Error",
+            JOptionPane.ERROR_MESSAGE);
     }
 }

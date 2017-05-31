@@ -4,9 +4,8 @@ import javax.sound.sampled.DataLine;
 import javax.sound.sampled.TargetDataLine;
 import javax.swing.*;
 
-//this class is used to test the microphone. it manages the volume meter
 class MicTester extends Thread {
-    private TargetDataLine mic = null;
+    private TargetDataLine microphone = null;
     private GUI frame;
 
     public MicTester(GUI frame) {
@@ -15,13 +14,12 @@ class MicTester extends Thread {
 
     @Override
     public void run() {
-
         try {
-            AudioFormat af = SoundPacket.defaultFormat;
+            AudioFormat audioFormat = SoundPacket.defaultFormat;
             DataLine.Info info = new DataLine.Info(TargetDataLine.class, null);
-            mic = (TargetDataLine) (AudioSystem.getLine(info));
-            mic.open(af);
-            mic.start();
+            microphone = (TargetDataLine) (AudioSystem.getLine(info));
+            microphone.open(audioFormat);
+            microphone.start();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(frame.getRootPane(), "Microphone not detected.\nPress OK to close this program", "Error", JOptionPane.ERROR_MESSAGE);
             System.exit(0);
@@ -29,13 +27,13 @@ class MicTester extends Thread {
 
         while (true) {
             Utils.sleep(10);
-            if (mic.available() > 0) {
+            if (microphone.available() > 0) {
                 byte[] buff = new byte[SoundPacket.defaultDataLength];
-                mic.read(buff, 0, buff.length);
+                microphone.read(buff, 0, buff.length);
                 long tot = 0;
 
                 for (int i = 0; i < buff.length; i++) {
-                    tot += MicThread.amplification * Math.abs(buff[i]);
+                    tot += MicrophoneThread.amplification * Math.abs(buff[i]);
                 }
                 tot *= 2.5;
                 tot /= buff.length;
@@ -45,7 +43,7 @@ class MicTester extends Thread {
     }
 
     public void close() {
-        if (mic != null) mic.close();
+        if (microphone != null) microphone.close();
         try {
             join();
         } catch (InterruptedException ex) {

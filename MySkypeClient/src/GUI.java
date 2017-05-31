@@ -1,15 +1,15 @@
 import javax.swing.*;
 
 public class GUI extends JFrame {
-    private MicTester micTester;
+    private MicrophoneTester microphoneTester;
 
     /**
      * Creates new form GUI
      */
     public GUI() {
         initComponents();
-        micTester = new MicTester(this);
-        micTester.start();
+        microphoneTester = new MicrophoneTester(this);
+        microphoneTester.start();
         setVisible(true);
     }
 
@@ -114,7 +114,7 @@ public class GUI extends JFrame {
             return;
         }
         //connected, disable buttons
-        micTester.close();
+        microphoneTester.close();
         ip.setEnabled(false);
         port.setEnabled(false);
         start.setEnabled(false);
@@ -128,7 +128,7 @@ public class GUI extends JFrame {
     }//GEN-LAST:event_startActionPerformed
 
     private void micVolStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_micVolStateChanged
-        MicThread.amplification = ((double) (micVol.getValue())) / 100.0;
+        MicrophoneThread.amplification = ((double) (micVol.getValue())) / 100.0;
     }//GEN-LAST:event_micVolStateChanged
 
 
@@ -149,7 +149,7 @@ public class GUI extends JFrame {
     // End of variables declaration//GEN-END:variables
 
 
-    public JProgressBar getMicLev() {
+    public JProgressBar getMicrophoneLevel() {
         return micLev;
     }
 }
