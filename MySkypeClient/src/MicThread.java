@@ -36,7 +36,7 @@ public class MicThread extends Thread {
 
     @Override
     public void run() {
-        for (;;) {
+        while(true) {
             if (mic.available() >= SoundPacket.defaultDataLength) { //we got enough data to send
                 byte[] buff = new byte[SoundPacket.defaultDataLength];
                 while (mic.available() >= SoundPacket.defaultDataLength) { //flush old data from mic to reduce lag, and read most recent data
@@ -68,7 +68,11 @@ public class MicThread extends Thread {
                     }
                     toServer.writeObject(m); //send message
                 } catch (IOException ex) { //connection error
-                    stop();
+                    try{
+                        join();
+                    } catch (InterruptedException e){
+
+                    }
                 }
             } else {
                 Utils.sleep(10); //sleep to avoid busy wait
