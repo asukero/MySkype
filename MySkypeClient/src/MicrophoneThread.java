@@ -1,42 +1,17 @@
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.DataLine;
 import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.TargetDataLine;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.zip.GZIPOutputStream;
 
-public class MicThread extends Thread {
+public class MicrophoneThread extends Microphone {
     public static double amplification = 1.0d;
     private ObjectOutputStream toServer;
-    private TargetDataLine microphone;
 
-    public MicThread(ObjectOutputStream toServer)
+    public MicrophoneThread(ObjectOutputStream toServer)
         throws LineUnavailableException {
         this.toServer = toServer;
         this.openMicrophoneLine();
-    }
-
-    private void openMicrophoneLine() throws LineUnavailableException {
-        AudioFormat audioFormat = SoundPacket.defaultFormat;
-        DataLine.Info info
-            = new DataLine.Info(TargetDataLine.class, null);
-        this.microphone = (TargetDataLine) AudioSystem.getLine(info);
-        this.microphone.open(audioFormat);
-        this.microphone.start();
-    }
-
-    private byte[] readFromMicrophone() {
-        byte[] buffer = new byte[SoundPacket.defaultDataLength];
-
-        // flush old data from microphone to reduce lag
-        while (this.microphone.available() >= SoundPacket.defaultDataLength) {
-            this.microphone.read(buffer, 0, buffer.length);
-        }
-
-        return buffer;
     }
 
     private void closeMicrophoneThread() {
@@ -60,15 +35,7 @@ public class MicThread extends Thread {
             byte[] buffer = this.readFromMicrophone();
 
             try {
-                long bufferCount = 0;
-
-                for (int i = 0; i < buffer.length; i++) {
-                    buffer[i] *= MicThread.amplification;
-                    bufferCount += Math.abs(buffer[i]);
-                }
-
-                bufferCount *= 2.5;
-                bufferCount /= buffer.length;
+                long bufferCount = this.getBufferCount(buffer);
 
                 if (bufferCount == 0) {
                     this.sendEmptyPacket();
