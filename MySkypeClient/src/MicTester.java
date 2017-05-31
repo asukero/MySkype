@@ -30,7 +30,7 @@ class MicTester extends Thread {
         while (true) {
             Utils.sleep(10);
             if (mic.available() > 0) {
-                byte[] buff = new byte[SoundPacket.defaultDataLenght];
+                byte[] buff = new byte[SoundPacket.defaultDataLength];
                 mic.read(buff, 0, buff.length);
                 long tot = 0;
 
