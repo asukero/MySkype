@@ -1,11 +1,7 @@
 import javax.sound.sampled.*;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.zip.GZIPInputStream;
 
-public class AudioChannel extends Thread {
+public class SoundHandler extends DataHandler {
     private Integer ID;
     private ArrayList<Message> messagesToPlay = new ArrayList<>();
     private int lastSoundPacketLen = SoundPacket.defaultDataLength;
@@ -20,19 +16,10 @@ public class AudioChannel extends Thread {
     public void closeAndKill() {
         if (this.speaker != null) this.speaker.close();
 
-        this.stopAudioChannel();
+        this.stopHandler();
     }
 
-    private void stopAudioChannel() {
-        try {
-            this.join();
-        } catch (InterruptedException interruptedException) {
-            System.out.print("Join error: "
-                + interruptedException.getMessage());
-        }
-    }
-
-    public AudioChannel(Integer ID) {
+    public SoundHandler(Integer ID) {
         this.ID = ID;
     }
 
@@ -70,31 +57,6 @@ public class AudioChannel extends Thread {
         this.speaker.write(noise, 0, noise.length);
     }
 
-    private byte[] decompressData(byte[] data) {
-        try {
-            GZIPInputStream gzipInputStream
-                = new GZIPInputStream(new ByteArrayInputStream(data));
-            ByteArrayOutputStream byteArrayOutputStream
-                = new ByteArrayOutputStream();
-
-            for (;;) {
-                int byteRead = gzipInputStream.read();
-
-                if (byteRead == -1) {
-                    break;
-                }
-
-                byteArrayOutputStream.write((byte) byteRead);
-            }
-
-            return byteArrayOutputStream.toByteArray();
-        } catch (IOException IOException) {
-            System.out.print("Decompress error: " + IOException.getMessage());
-
-            return null;
-        }
-    }
-
     private void playData(byte[] soundToPlay, SoundPacket soundPacket) {
         this.speaker.write(soundToPlay, 0, soundToPlay.length);
         this.lastSoundPacketLen = soundPacket.getData().length;
@@ -111,8 +73,8 @@ public class AudioChannel extends Thread {
             return;
         }
 
-        this.playData(this.decompressData(soundPacket.getData()),
-                soundPacket);
+        this.playData(SoundHandler.decompressData(soundPacket.getData()),
+            soundPacket);
     }
 
     @Override

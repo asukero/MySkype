@@ -128,7 +128,7 @@ public class GUI extends JFrame {
     }//GEN-LAST:event_startActionPerformed
 
     private void micVolStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_micVolStateChanged
-        MicrophoneThread.amplification = ((double) (micVol.getValue())) / 100.0;
+        SoundSender.amplification = ((double) (micVol.getValue())) / 100.0;
     }//GEN-LAST:event_micVolStateChanged
 
 

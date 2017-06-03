@@ -6,7 +6,8 @@ import java.util.HashMap;
 
 public class Client extends Thread {
     private Socket socket;
-    private HashMap<Integer, AudioChannel> audioChannels = new HashMap<>();
+    private HashMap<Integer, SoundHandler> audioHandlers = new HashMap<>();
+    private TextHandler textHandler = new TextHandler();
 
     public Client(String serverIP, int serverPort) throws IOException {
         this.socket = new Socket(serverIP, serverPort);
@@ -21,6 +22,7 @@ public class Client extends Thread {
                     = new ObjectOutputStream(this.socket.getOutputStream());
 
             this.getMicrophoneThread(to);
+            this.getTextThread(to);
             this.runClient(from);
         } catch (Exception exception) {
             Utils.displayError("Client error: " + exception.getMessage());
@@ -33,49 +35,86 @@ public class Client extends Thread {
             if (this.socket.getInputStream().available() > 0) {
                 this.receiveFrom(from);
             } else {
-                this.killAudioChannels();
+                this.killAudioHandlers();
             }
         }
     }
 
-    private void addAudioChannel(Message message) {
-        AudioChannel newChannel = new AudioChannel(message.getID());
-        newChannel.addMessageToPlay(message);
-        newChannel.start();
-        this.audioChannels.put(newChannel.getID(), newChannel);
+    private void addAudioHandler(Message message) {
+        SoundHandler newHandler = new SoundHandler(message.getID());
+        newHandler.addMessageToPlay(message);
+        newHandler.start();
+        this.audioHandlers.put(newHandler.getID(), newHandler);
     }
 
     private void receiveFrom(ObjectInputStream from)
         throws IOException, ClassNotFoundException {
         Message message = (Message) from.readObject();
 
-        AudioChannel sendTo = this.audioChannels.get(message.getID());
+        if (message == null) return;
+
+        this.handlePacket(message);
+    }
+
+    private void handlePacket(Message message) {
+        Object data = message.getData();
+
+        if (data == null) return;
+
+        String methodToCall = "handle" + Utils.getClassName(data);
+
+        Utils.invokeMethod(this, methodToCall, message);
+    }
+
+    private void handleSoundPacket(Message message) {
+        SoundHandler sendTo = this.audioHandlers.get(message.getID());
 
         if (sendTo != null) {
             sendTo.addMessageToPlay(message);
         } else {
-            this.addAudioChannel(message);
+            this.addAudioHandler(message);
         }
     }
 
-    private void killAudioChannels() {
-        this.audioChannels.values().stream().filter(audioChannel
-            -> audioChannel.canKill()).forEach(this::killChannel);
+    private void handleTextPacket(Message message) {
+        TextPacket textPacket = (TextPacket) message.getData();
+
+        if (textPacket == null) return;
+
+        this.textHandler.displayOnConsole(
+            TextHandler.decompressData(textPacket.getData()),
+            message.getTimestamp());
+    }
+
+    private void killAudioHandlers() {
+        this.audioHandlers.values().stream().filter(soundHandler
+            -> soundHandler.canKill()).forEach(this::killAudioHandler);
 
         Utils.sleep(1);
     }
 
-    private void killChannel(AudioChannel audioChannel) {
-        audioChannel.closeAndKill();
-        this.audioChannels.remove(audioChannel.getID());
+    private void killAudioHandler(SoundHandler soundHandler) {
+        soundHandler.closeAndKill();
+        this.audioHandlers.remove(soundHandler.getID());
+    }
+
+    private void getTextThread(ObjectOutputStream to) {
+        try {
+            Utils.sleep(100);
+
+            TextSender textSender = new TextSender(to);
+            textSender.start();
+        } catch (Exception exception) {
+            Utils.displayError("Text error: " + exception.getMessage());
+        }
     }
 
     private void getMicrophoneThread(ObjectOutputStream to) {
         try {
             Utils.sleep(100);
 
-            MicrophoneThread microphoneThread = new MicrophoneThread(to);
-            microphoneThread.start();
+            SoundSender soundSender = new SoundSender(to);
+            soundSender.start();
         } catch (Exception exception) {
             Utils.displayError("Microphone error: " + exception.getMessage());
         }
