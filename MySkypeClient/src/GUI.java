@@ -1,6 +1,7 @@
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.io.PrintStream;
 
 public class GUI extends JFrame {
@@ -169,7 +170,7 @@ public class GUI extends JFrame {
         setSize(getWidth(), getHeight() +150);
     }//GEN-LAST:event_startActionPerformed
 
-    private void sendMessage(ChangeEvent e){
+    private void sendMessage(ActionEvent e){
         if(e.getSource() instanceof JButton){
             String message = jTextArea.getText();
             //TODO SEND TO SERVER
