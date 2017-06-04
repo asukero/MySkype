@@ -32,12 +32,20 @@ public class TextSender extends ObjectSender {
             ByteArrayOutputStream byteArrayOutputStream
                 = TextHandler.compressData(text.getBytes());
 
-            // an ID and a timestamp will be generated
-            this.sendMessage(new Message(
+            Message message = new Message(
                 -1,
                 -1,
                 new TextPacket(byteArrayOutputStream.toByteArray()),
-                this.username));
+                this.username);
+
+            this.textHandler.displayText(
+                    TextHandler.decompressData((
+                    (Packet) message.getData()).getData()),
+                    message.getRealDate(),
+                    message.getUsername());
+
+            // an ID and a timestamp will be generated
+            this.sendMessage(message);
         } catch (IOException IOException) {
             System.out.println("Connection error: " + IOException.getMessage());
 
