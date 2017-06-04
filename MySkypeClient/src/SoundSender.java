@@ -6,10 +6,11 @@ import java.io.ObjectOutputStream;
 public class SoundSender extends Microphone {
     public static double amplification = 1.0d;
 
-    public SoundSender(ObjectOutputStream toServer)
+    public SoundSender(ObjectOutputStream toServer, String username)
         throws LineUnavailableException {
         this.toServer = toServer;
         this.openMicrophoneLine();
+        this.username = username;
     }
 
     @Override
@@ -56,6 +57,7 @@ public class SoundSender extends Microphone {
     @Override
     protected void sendEmptyPacket() throws IOException {
         this.sendMessage(
-            new Message(-1, -1, new SoundPacket(null)));
+            new Message(-1, -1, new SoundPacket(null),
+            this.username));
     }
 }

@@ -4,8 +4,9 @@ import java.io.ObjectOutputStream;
 
 public class TextSender extends ObjectSender {
     private TextHandler textHandler = new TextHandler();
-    public TextSender(ObjectOutputStream toServer) {
+    public TextSender(ObjectOutputStream toServer, String username) {
         this.toServer = toServer;
+        this.username = username;
     }
 
     @Override
@@ -22,7 +23,8 @@ public class TextSender extends ObjectSender {
     @Override
     protected void sendEmptyPacket() throws IOException {
         this.sendMessage(
-            new Message(-1, -1, new TextPacket(null)));
+            new Message(-1, -1, new TextPacket(null),
+            this.username));
     }
 
     public void sendText(String text) {
@@ -34,7 +36,8 @@ public class TextSender extends ObjectSender {
             this.sendMessage(new Message(
                 -1,
                 -1,
-                new TextPacket(byteArrayOutputStream.toByteArray())));
+                new TextPacket(byteArrayOutputStream.toByteArray()),
+                this.username));
         } catch (IOException IOException) {
             System.out.println("Connection error: " + IOException.getMessage());
 

@@ -8,9 +8,12 @@ public class Client extends Thread {
     private Socket socket;
     private HashMap<Integer, SoundHandler> audioHandlers = new HashMap<>();
     private TextHandler textHandler = new TextHandler();
+    private TextSender textSender;
+    private String username;
 
     public Client(String serverIP, int serverPort, String username) throws IOException {
         this.socket = new Socket(serverIP, serverPort);
+        this.username = username;
     }
 
     @Override
@@ -21,8 +24,8 @@ public class Client extends Thread {
             ObjectOutputStream to
                     = new ObjectOutputStream(this.socket.getOutputStream());
 
-            this.getMicrophoneThread(to);
             this.getTextThread(to);
+            this.getMicrophoneThread(to);
             this.runClient(from);
         } catch (Exception exception) {
             Utils.displayError("Client error: " + exception.getMessage());
@@ -83,7 +86,8 @@ public class Client extends Thread {
 
         this.textHandler.displayText(
             TextHandler.decompressData(textPacket.getData()),
-            message.getRealDate());
+            message.getRealDate(),
+            message.getUsername());
     }
 
     private void killAudioHandlers() {
@@ -102,7 +106,7 @@ public class Client extends Thread {
         try {
             Utils.sleep(100);
 
-            TextSender textSender = new TextSender(to);
+            this.textSender = new TextSender(to, this.username);
             textSender.start();
         } catch (Exception exception) {
             Utils.displayError("Text error: " + exception.getMessage());
@@ -113,10 +117,14 @@ public class Client extends Thread {
         try {
             Utils.sleep(100);
 
-            SoundSender soundSender = new SoundSender(to);
+            SoundSender soundSender = new SoundSender(to, this.username);
             soundSender.start();
         } catch (Exception exception) {
             Utils.displayError("Microphone error: " + exception.getMessage());
         }
+    }
+
+    public TextSender getTextSender() {
+        return this.textSender;
     }
 }

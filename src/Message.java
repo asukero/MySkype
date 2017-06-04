@@ -8,12 +8,14 @@ public class Message implements Serializable{
     private long TTL = 2000; // 2 seconds
     private long realDate;
     private Object data;
+    private String username;
 
-    public Message(Integer ID, long timestamp, Object data) {
+    public Message(Integer ID, long timestamp, Object data, String username) {
         this.ID = ID;
         this.timestamp = timestamp;
         this.data = data;
         this.realDate = (new Date()).getTime();
+        this.username = username;
     }
 
     public void setTimestamp(long timestamp) {
@@ -46,5 +48,9 @@ public class Message implements Serializable{
 
     public long getRealDate() {
         return this.realDate;
+    }
+
+    public String getUsername() {
+        return this.username;
     }
 }

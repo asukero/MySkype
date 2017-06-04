@@ -1,10 +1,10 @@
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.util.Arrays;
 
 public abstract class ObjectSender extends Thread {
     protected ObjectOutputStream toServer;
+    protected String username;
 
     protected void sendData(byte[] buffer) throws IOException {
         ByteArrayOutputStream byteArrayOutputStream
@@ -13,7 +13,7 @@ public abstract class ObjectSender extends Thread {
         // an ID and a timestamp will be generated
         this.sendMessage(new Message(-1,
                 -1,
-                this.createPacket(byteArrayOutputStream)));
+                this.createPacket(byteArrayOutputStream), this.username));
     }
 
     protected abstract ByteArrayOutputStream compressData(byte[] buffer)
