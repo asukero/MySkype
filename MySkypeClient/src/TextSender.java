@@ -25,24 +25,28 @@ public class TextSender extends ObjectSender {
             new Message(-1, -1, new TextPacket(null)));
     }
 
-    @Override
-    public void run() {
+    public void sendText(String text) {
         try {
-            while (true) {
-                String text = this.textHandler.getTextFromConsole();
-                ByteArrayOutputStream byteArrayOutputStream
-                    = TextHandler.compressData(text.getBytes());
+            ByteArrayOutputStream byteArrayOutputStream
+                = TextHandler.compressData(text.getBytes());
 
-                // an ID and a timestamp will be generated
-                this.sendMessage(new Message(
-                    -1,
-                    -1,
-                    new TextPacket(byteArrayOutputStream.toByteArray())));
-            }
-        } catch (Exception exception) {
-            System.out.println("Connection error: " + exception.getMessage());
+            // an ID and a timestamp will be generated
+            this.sendMessage(new Message(
+                -1,
+                -1,
+                new TextPacket(byteArrayOutputStream.toByteArray())));
+        } catch (IOException IOException) {
+            System.out.println("Connection error: " + IOException.getMessage());
 
             this.closeSenderThread();
+        }
+    }
+
+    @Override
+    public void run() {
+        while (true) {
+            String text = this.textHandler.getTextFromConsole();
+            this.sendText(text);
         }
     }
 }
