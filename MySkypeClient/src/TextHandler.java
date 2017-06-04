@@ -26,7 +26,7 @@ public class TextHandler extends DataHandler {
 
     private String getTextFormatted(String text, long realDate,
         String username) {
-        if (username != null && !username.isEmpty()) {
+        if (username == null || username.isEmpty()) {
             username = TextHandler.DEFAULT_USERNAME;
         }
 
