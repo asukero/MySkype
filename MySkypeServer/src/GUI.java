@@ -3,12 +3,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
-
-/*
- * To change this template, choose Tools | Templates and open the template in
- * the editor.
- */
-
 /**
  *
  * @author dosse
@@ -100,30 +94,25 @@ public class GUI extends javax.swing.JFrame {
         if (jButton1.getText().equals("Stop")) {
             System.exit(0);
         }
-        new Thread() { //start server in new thread
-
-            @Override
-            public void run() {
-                try {
-                    new Server(Integer.parseInt(jTextField1.getText()),upnp.isSelected());
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(rootPane,ex,getTitle(),JOptionPane.ERROR_MESSAGE);
-                    System.exit(0);
+        //start server in new thread
+        new Thread(() -> {
+            try {
+                new Server(Integer.parseInt(jTextField1.getText()),upnp.isSelected());
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(rootPane,ex,getTitle(),JOptionPane.ERROR_MESSAGE);
+                System.exit(0);
+            }
+        }).start();
+        //start logger
+        new Thread(() -> {
+            for (;;) {
+                Utils.sleep(100);
+                if (!Log.get().equals(log.getText())) {
+                    log.setText(Log.get());
+                    log.getCaret().setDot(Log.get().length());
                 }
             }
-        }.start();
-        new Thread() { //start logger
-            @Override
-            public void run() {
-                for (;;) {
-                    Utils.sleep(100);
-                    if (!Log.get().equals(log.getText())) {
-                        log.setText(Log.get());
-                        log.getCaret().setDot(Log.get().length());
-                    }
-                }
-            }
-        }.start();
+        }).start();
         jTextField1.setEnabled(false);
         jButton1.setText("Stop");
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -133,42 +122,9 @@ public class GUI extends javax.swing.JFrame {
      */
     public static void main(String args[]) {
         /*
-         * Set the Nimbus look and feel
-         */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /*
-         * If Nimbus (introduced in Java SE 6) is not available, stay with the
-         * default look and feel. For details see
-         * http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /*
          * Create and display the form
          */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-
-            @Override
-            public void run() {
-                new GUI().setVisible(true);
-            }
-        });
+        java.awt.EventQueue.invokeLater(() -> new GUI().setVisible(true));
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;

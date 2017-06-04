@@ -9,7 +9,7 @@ public class Client extends Thread {
     private HashMap<Integer, SoundHandler> audioHandlers = new HashMap<>();
     private TextHandler textHandler = new TextHandler();
 
-    public Client(String serverIP, int serverPort) throws IOException {
+    public Client(String serverIP, int serverPort, String username) throws IOException {
         this.socket = new Socket(serverIP, serverPort);
     }
 
