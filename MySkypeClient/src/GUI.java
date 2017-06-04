@@ -2,6 +2,8 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.io.PrintStream;
 
 public class GUI extends JFrame {
@@ -66,7 +68,7 @@ public class GUI extends JFrame {
         start.addActionListener(evt -> startActionPerformed(evt));
 
         chat.setText("Send!");
-        chat.addActionListener(e -> sendMessage(e));
+        chat.addActionListener(e -> sendMessage());
 
         jTextFiled.setColumns(40);
 
@@ -166,6 +168,15 @@ public class GUI extends JFrame {
             JOptionPane.showMessageDialog(rootPane, ex, "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
+
+        KeyboardFocusManager.getCurrentKeyboardFocusManager()
+                .addKeyEventDispatcher(e -> {
+                    if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                        sendMessage();
+                    }
+                    return false;
+                });
+
         //connected, disable buttons
         microphoneTester.close();
         ip.setEnabled(false);
@@ -182,11 +193,11 @@ public class GUI extends JFrame {
         jTextFiled.setVisible(true);
         chat.setVisible(true);
 
-        setSize(getWidth(), getHeight() +150);
+        setSize(getWidth(), getHeight() + 150);
     }//GEN-LAST:event_startActionPerformed
 
-    private void sendMessage(ActionEvent e){
-        if(e.getSource() instanceof JButton){
+    private void sendMessage(){
+        if(!jTextFiled.getText().equals("")){
             String message = jTextFiled.getText();
             client.getTextSender().sendText(message);
             jTextFiled.setText("");
