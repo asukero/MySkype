@@ -160,7 +160,8 @@ public class GUI extends JFrame {
 
     private void startActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startActionPerformed
         try {
-            new Client(ip.getText(), Integer.parseInt(port.getText()), username.getText()).start(); //connect to specified server at specified port
+            client = new Client(ip.getText(), Integer.parseInt(port.getText()), username.getText());
+            client.start(); //connect to specified server at specified port
         } catch (Exception ex) { //connection failed
             JOptionPane.showMessageDialog(rootPane, ex, "Error", JOptionPane.ERROR_MESSAGE);
             return;
@@ -216,6 +217,8 @@ public class GUI extends JFrame {
     private JTextField jTextFiled;
     private JButton chat;
     // End of variables declaration//GEN-END:variables
+
+    private Client client;
 
 
     public JProgressBar getMicrophoneLevel() {
