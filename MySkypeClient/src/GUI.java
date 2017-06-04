@@ -188,7 +188,8 @@ public class GUI extends JFrame {
     private void sendMessage(ActionEvent e){
         if(e.getSource() instanceof JButton){
             String message = jTextFiled.getText();
-            //TODO SEND TO SERVER
+            client.getTextSender().sendText(message);
+            jTextFiled.setText("");
         }
     }
 
