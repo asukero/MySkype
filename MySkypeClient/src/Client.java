@@ -81,7 +81,7 @@ public class Client extends Thread {
 
         if (textPacket == null) return;
 
-        this.textHandler.displayOnConsole(
+        this.textHandler.displayText(
             TextHandler.decompressData(textPacket.getData()),
             message.getTimestamp());
     }
