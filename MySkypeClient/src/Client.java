@@ -83,7 +83,7 @@ public class Client extends Thread {
 
         this.textHandler.displayText(
             TextHandler.decompressData(textPacket.getData()),
-            message.getTimestamp());
+            message.getRealDate());
     }
 
     private void killAudioHandlers() {
