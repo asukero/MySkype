@@ -1,4 +1,7 @@
 import java.io.UnsupportedEncodingException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Scanner;
 
 public class TextHandler extends DataHandler {
@@ -16,19 +19,25 @@ public class TextHandler extends DataHandler {
         }
     }
 
-    private String getTextFormatted(String text, long timestamp) {
-        return "[" + timestamp + "] Anonymous: " + text;
+    private String getDate(long timestamp) {
+        Date date = new Date(timestamp);
+        DateFormat formatter = new SimpleDateFormat("HH:mm");
+        return formatter.format(date);
+    }
+
+    private String getTextFormatted(String text, long realDate) {
+        return "[" + this.getDate(realDate) + "] Anonymous: " + text;
     }
 
     public String getTextFromConsole() {
         return this.scanner.next();
     }
 
-    public void displayText(String text, long timestamp) {
-        System.out.println(this.getTextFormatted(text, timestamp));
+    public void displayText(String text, long realDate) {
+        System.out.println(this.getTextFormatted(text, realDate));
     }
 
-    public void displayText(byte[] text, long timestamp) {
-        this.displayText(this.getStringFromBytes(text), timestamp);
+    public void displayText(byte[] text, long realDate) {
+        this.displayText(this.getStringFromBytes(text), realDate);
     }
 }
