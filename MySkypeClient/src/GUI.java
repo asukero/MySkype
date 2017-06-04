@@ -43,14 +43,16 @@ public class GUI extends JFrame {
         ip = new JTextField();
         start = new JButton();
         port = new JTextField();
+        username = new JTextField();
         jLabel1 = new JLabel();
         jLabel3 = new JLabel();
         micLev = new JProgressBar();
         jLabel2 = new JLabel();
         jLabel4 = new JLabel();
+        jLabel5 = new JLabel();
         micVol = new JSlider();
         logPanel = new JPanel();
-        jTextArea = new JTextArea(1,50);
+        jTextFiled = new JTextField();
         chat = new JButton();
 
         initLogger(logPanel);
@@ -66,6 +68,8 @@ public class GUI extends JFrame {
         chat.setText("Send!");
         chat.addActionListener(e -> sendMessage(e));
 
+        jTextFiled.setColumns(40);
+
         port.setText("1049");
 
         jLabel1.setText("Server IP and port");
@@ -76,13 +80,15 @@ public class GUI extends JFrame {
 
         jLabel4.setText("Mic volume");
 
+        jLabel5.setText("Nickname");
+
         micVol.setMaximum(300);
         micVol.setMinimum(50);
         micVol.setValue(100);
         micVol.addChangeListener(evt -> micVolStateChanged(evt));
 
         logPanel.setVisible(false);
-        jTextArea.setVisible(false);
+        jTextFiled.setVisible(false);
         chat.setVisible(false);
 
         GroupLayout layout = new GroupLayout(getContentPane());
@@ -93,7 +99,12 @@ public class GUI extends JFrame {
                                 .addContainerGap()
                                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                         .addComponent(jLabel2, GroupLayout.DEFAULT_SIZE, 338, Short.MAX_VALUE)
-                                        .addComponent(start, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addComponent(jLabel5, GroupLayout.PREFERRED_SIZE, 63, GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(username, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(start, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                         .addGroup(layout.createSequentialGroup()
                                                 .addComponent(jLabel1, GroupLayout.PREFERRED_SIZE, 107, GroupLayout.PREFERRED_SIZE)
                                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
@@ -110,7 +121,7 @@ public class GUI extends JFrame {
                                                         .addComponent(micVol, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                                         .addComponent(logPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addGroup(layout.createSequentialGroup()
-                                                        .addComponent(jTextArea, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                        .addComponent(jTextFiled, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                         .addComponent(chat, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                                 .addContainerGap())
         );
@@ -123,7 +134,10 @@ public class GUI extends JFrame {
                                         .addComponent(port, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                         .addComponent(jLabel1))
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(start)
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                        .addComponent(jLabel5, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(username, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(start))
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                         .addComponent(jLabel3)
@@ -136,7 +150,7 @@ public class GUI extends JFrame {
                                 .addComponent(jLabel2, GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE)
                                 .addComponent(logPanel)
                                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(jTextArea, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jTextFiled, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(chat, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addContainerGap())
         );
@@ -146,7 +160,7 @@ public class GUI extends JFrame {
 
     private void startActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startActionPerformed
         try {
-            new Client(ip.getText(), Integer.parseInt(port.getText())).start(); //connect to specified server at specified port
+            new Client(ip.getText(), Integer.parseInt(port.getText()), username.getText()).start(); //connect to specified server at specified port
         } catch (Exception ex) { //connection failed
             JOptionPane.showMessageDialog(rootPane, ex, "Error", JOptionPane.ERROR_MESSAGE);
             return;
@@ -164,7 +178,7 @@ public class GUI extends JFrame {
         jLabel2.setVisible(false);
 
         logPanel.setVisible(true);
-        jTextArea.setVisible(true);
+        jTextFiled.setVisible(true);
         chat.setVisible(true);
 
         setSize(getWidth(), getHeight() +150);
@@ -172,7 +186,7 @@ public class GUI extends JFrame {
 
     private void sendMessage(ActionEvent e){
         if(e.getSource() instanceof JButton){
-            String message = jTextArea.getText();
+            String message = jTextFiled.getText();
             //TODO SEND TO SERVER
         }
     }
@@ -192,12 +206,14 @@ public class GUI extends JFrame {
     private JLabel jLabel2;
     private JLabel jLabel3;
     private JLabel jLabel4;
+    private JLabel jLabel5;
     private JProgressBar micLev;
     private JSlider micVol;
     private JTextField port;
+    private JTextField username;
     private JButton start;
     private JPanel logPanel;
-    private JTextArea jTextArea;
+    private JTextField jTextFiled;
     private JButton chat;
     // End of variables declaration//GEN-END:variables
 
