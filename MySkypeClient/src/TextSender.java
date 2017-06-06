@@ -4,7 +4,7 @@ import java.io.ObjectOutputStream;
 
 public class TextSender extends ObjectSender {
     private TextHandler textHandler = new TextHandler();
-    public TextSender(ObjectOutputStream toServer, String username) {
+    public TextSender(ObjectOutputStream toServer, Username username) {
         this.toServer = toServer;
         this.username = username;
     }

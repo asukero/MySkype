@@ -8,9 +8,9 @@ public class Message implements Serializable{
     private long TTL = 2000; // 2 seconds
     private long realDate;
     private Object data;
-    private String username;
+    private Username username;
 
-    public Message(Integer ID, long timestamp, Object data, String username) {
+    public Message(Integer ID, long timestamp, Object data, Username username) {
         this.ID = ID;
         this.timestamp = timestamp;
         this.data = data;
@@ -50,7 +50,7 @@ public class Message implements Serializable{
         return this.realDate;
     }
 
-    public String getUsername() {
+    public Username getUsername() {
         return this.username;
     }
 }

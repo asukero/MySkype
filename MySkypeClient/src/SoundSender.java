@@ -6,7 +6,7 @@ import java.io.ObjectOutputStream;
 public class SoundSender extends Microphone {
     public static double amplification = 1.0d;
 
-    public SoundSender(ObjectOutputStream toServer, String username)
+    public SoundSender(ObjectOutputStream toServer, Username username)
         throws LineUnavailableException {
         this.toServer = toServer;
         this.openMicrophoneLine();

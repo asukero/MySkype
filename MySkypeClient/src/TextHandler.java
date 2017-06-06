@@ -5,7 +5,6 @@ import java.util.Scanner;
 
 public class TextHandler extends DataHandler {
     private Scanner scanner;
-    public static String DEFAULT_USERNAME = "Anonymous";
 
     public TextHandler() {
         this.scanner = new Scanner(System.in);
@@ -25,11 +24,7 @@ public class TextHandler extends DataHandler {
     }
 
     private String getTextFormatted(String text, long realDate,
-        String username) {
-        if (username == null || username.isEmpty()) {
-            username = TextHandler.DEFAULT_USERNAME;
-        }
-
+        Username username) {
         return String.format(
             "[%s] %s: %s", this.getDate(realDate), username, text);
     }
@@ -38,11 +33,11 @@ public class TextHandler extends DataHandler {
         return this.scanner.next();
     }
 
-    public void displayText(String text, long realDate, String username) {
+    public void displayText(String text, long realDate, Username username) {
         System.out.println(this.getTextFormatted(text, realDate, username));
     }
 
-    public void displayText(byte[] text, long realDate, String username) {
+    public void displayText(byte[] text, long realDate, Username username) {
         this.displayText(this.getStringFromBytes(text), realDate, username);
     }
 }

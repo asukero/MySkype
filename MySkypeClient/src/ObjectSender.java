@@ -4,7 +4,7 @@ import java.io.ObjectOutputStream;
 
 public abstract class ObjectSender extends Thread {
     protected ObjectOutputStream toServer;
-    protected String username;
+    protected Username username;
 
     protected void sendData(byte[] buffer) throws IOException {
         ByteArrayOutputStream byteArrayOutputStream
